@@ -59,5 +59,61 @@ $(document).ready(function(){
             $('.overlay, #order').fadeIn('slow');
         });
     });
+   function toogleModal(item){
+    $(item).validate({
+        rules:{
+            name: {required:true,
+                    minlength:5},
+            phone: "required",
+            email: {required:true,
+            email:true}
+            
+        },
+        messages: {
+            name: {
+              required: "введите свое имя",
+              minlength:jQuery.validator.format("Введите более {0} символов")
+            }
+
+          }
+    });   }
+     toogleModal('#consultation-form');
+     toogleModal('#consultation form');
+     toogleModal('#order form');
+    
+    $('input[name=phone]').mask('+996(999)99-99-99');
+
+    $('form').submit(function(e){
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: 'mailer/smart.php',
+            data: $(this).serialize()
+        }).done(function(){
+            $(this).find("input").val("");
+            $('#consultation, #order').fadeOut();
+            $('.overlay, #thanks').fadeIn('slow');
+
+            $('form').trigger('reset');
+
+        });
+        return false
+    })
+    $(window).scroll(function(){
+        if($(this).scrollTop()>1600){
+            $('.pageup').fadeIn();}
+            else{$('.pageup').fadeOut();}
+        
+    })
+    //scroll
+    $("a[href^='#']").click(function(){
+        var _href = $(this).attr("href");
+        $("html, body").animate({scrollTop: $(_href).offset().top+"px"});
+        return false;
+});
+       new WOW().init();
+
+    //    const test = document.querySelector("li");
+    //    console.log(test);
 
   });
